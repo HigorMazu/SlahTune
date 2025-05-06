@@ -1,0 +1,318 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+      <Schema Namespace="SlahTuneModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="Artista">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Nome" Type="varchar" MaxLength="75" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Musica">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Nome" Type="varchar" MaxLength="150" Nullable="false" />
+        </EntityType>
+        <!--Errors Found During Generation:
+warning 6002: The table/view 'SlahTune.dbo.Musica_Has_Artista' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <EntityType Name="Musica_Has_Artista">
+          <Key>
+            <PropertyRef Name="IDMusica" />
+            <PropertyRef Name="IDArtista" />
+          </Key>
+          <Property Name="IDMusica" Type="int" Nullable="false" />
+          <Property Name="IDArtista" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Nota">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Nota" Type="varchar" MaxLength="25" Nullable="false" />
+          <Property Name="Frequencia" Type="varchar(max)" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Tablatura">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Identificador" Type="varchar(max)" />
+          <Property Name="IDUsuario" Type="int" />
+          <Property Name="IDMusica" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Usuario">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Nome" Type="varchar" MaxLength="30" Nullable="false" />
+          <Property Name="Senha" Type="varchar" MaxLength="200" Nullable="false" />
+          <Property Name="Email" Type="varchar" MaxLength="100" Nullable="false" />
+          <Property Name="Foto" Type="image" Nullable="false" />
+        </EntityType>
+        <Association Name="FK__Musica_Ha__IDArt__182C9B23">
+          <End Role="Artista" Type="Self.Artista" Multiplicity="1" />
+          <End Role="Musica_Has_Artista" Type="Self.Musica_Has_Artista" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Artista">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Musica_Has_Artista">
+              <PropertyRef Name="IDArtista" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Musica_Ha__IDMus__173876EA">
+          <End Role="Musica" Type="Self.Musica" Multiplicity="1" />
+          <End Role="Musica_Has_Artista" Type="Self.Musica_Has_Artista" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Musica">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Musica_Has_Artista">
+              <PropertyRef Name="IDMusica" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Tablatura__IDMus__1BFD2C07">
+          <End Role="Musica" Type="Self.Musica" Multiplicity="1" />
+          <End Role="Tablatura" Type="Self.Tablatura" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Musica">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Tablatura">
+              <PropertyRef Name="IDMusica" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Tablatura__IDUsu__1B0907CE">
+          <End Role="Usuario" Type="Self.Usuario" Multiplicity="0..1" />
+          <End Role="Tablatura" Type="Self.Tablatura" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Usuario">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Tablatura">
+              <PropertyRef Name="IDUsuario" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="SlahTuneModelStoreContainer">
+          <EntitySet Name="Artista" EntityType="Self.Artista" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Musica" EntityType="Self.Musica" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Nota" EntityType="Self.Nota" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Tablatura" EntityType="Self.Tablatura" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Usuario" EntityType="Self.Usuario" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Musica_Has_Artista" EntityType="Self.Musica_Has_Artista" store:Type="Tables" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+    [Musica_Has_Artista].[IDMusica] AS [IDMusica], 
+    [Musica_Has_Artista].[IDArtista] AS [IDArtista]
+    FROM [dbo].[Musica_Has_Artista] AS [Musica_Has_Artista]</DefiningQuery>
+          </EntitySet>
+          <AssociationSet Name="FK__Musica_Ha__IDArt__182C9B23" Association="Self.FK__Musica_Ha__IDArt__182C9B23">
+            <End Role="Artista" EntitySet="Artista" />
+            <End Role="Musica_Has_Artista" EntitySet="Musica_Has_Artista" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Musica_Ha__IDMus__173876EA" Association="Self.FK__Musica_Ha__IDMus__173876EA">
+            <End Role="Musica" EntitySet="Musica" />
+            <End Role="Musica_Has_Artista" EntitySet="Musica_Has_Artista" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Tablatura__IDMus__1BFD2C07" Association="Self.FK__Tablatura__IDMus__1BFD2C07">
+            <End Role="Musica" EntitySet="Musica" />
+            <End Role="Tablatura" EntitySet="Tablatura" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Tablatura__IDUsu__1B0907CE" Association="Self.FK__Tablatura__IDUsu__1B0907CE">
+            <End Role="Usuario" EntitySet="Usuario" />
+            <End Role="Tablatura" EntitySet="Tablatura" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="SlahTuneModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="Artista">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Nome" Type="String" MaxLength="75" FixedLength="false" Unicode="false" Nullable="false" />
+          <NavigationProperty Name="Musica" Relationship="Self.Musica_Has_Artista" FromRole="Artista" ToRole="Musica" />
+        </EntityType>
+        <EntityType Name="Musica">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Nome" Type="String" MaxLength="150" FixedLength="false" Unicode="false" Nullable="false" />
+          <NavigationProperty Name="Tablatura" Relationship="Self.FK__Tablatura__IDMus__1BFD2C07" FromRole="Musica" ToRole="Tablatura" />
+          <NavigationProperty Name="Artista" Relationship="Self.Musica_Has_Artista" FromRole="Musica" ToRole="Artista" />
+        </EntityType>
+        <EntityType Name="Nota">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Nota1" Type="String" MaxLength="25" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Frequencia" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Tablatura">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Identificador" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="IDUsuario" Type="Int32" />
+          <Property Name="IDMusica" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Musica" Relationship="Self.FK__Tablatura__IDMus__1BFD2C07" FromRole="Tablatura" ToRole="Musica" />
+          <NavigationProperty Name="Usuario" Relationship="Self.FK__Tablatura__IDUsu__1B0907CE" FromRole="Tablatura" ToRole="Usuario" />
+        </EntityType>
+        <EntityType Name="Usuario">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Nome" Type="String" MaxLength="30" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Senha" Type="String" MaxLength="200" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Email" Type="String" MaxLength="100" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Foto" Type="Binary" MaxLength="Max" FixedLength="false" Nullable="false" />
+          <NavigationProperty Name="Tablatura" Relationship="Self.FK__Tablatura__IDUsu__1B0907CE" FromRole="Usuario" ToRole="Tablatura" />
+        </EntityType>
+        <Association Name="FK__Tablatura__IDMus__1BFD2C07">
+          <End Role="Musica" Type="Self.Musica" Multiplicity="1" />
+          <End Role="Tablatura" Type="Self.Tablatura" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Musica">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Tablatura">
+              <PropertyRef Name="IDMusica" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Tablatura__IDUsu__1B0907CE">
+          <End Role="Usuario" Type="Self.Usuario" Multiplicity="0..1" />
+          <End Role="Tablatura" Type="Self.Tablatura" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Usuario">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Tablatura">
+              <PropertyRef Name="IDUsuario" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="Musica_Has_Artista">
+          <End Role="Artista" Type="Self.Artista" Multiplicity="*" />
+          <End Role="Musica" Type="Self.Musica" Multiplicity="*" />
+        </Association>
+        <EntityContainer Name="SlahTuneEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="Artista" EntityType="Self.Artista" />
+          <EntitySet Name="Musica" EntityType="Self.Musica" />
+          <EntitySet Name="Nota" EntityType="Self.Nota" />
+          <EntitySet Name="Tablatura" EntityType="Self.Tablatura" />
+          <EntitySet Name="Usuario" EntityType="Self.Usuario" />
+          <AssociationSet Name="FK__Tablatura__IDMus__1BFD2C07" Association="Self.FK__Tablatura__IDMus__1BFD2C07">
+            <End Role="Musica" EntitySet="Musica" />
+            <End Role="Tablatura" EntitySet="Tablatura" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Tablatura__IDUsu__1B0907CE" Association="Self.FK__Tablatura__IDUsu__1B0907CE">
+            <End Role="Usuario" EntitySet="Usuario" />
+            <End Role="Tablatura" EntitySet="Tablatura" />
+          </AssociationSet>
+          <AssociationSet Name="Musica_Has_Artista" Association="Self.Musica_Has_Artista">
+            <End Role="Artista" EntitySet="Artista" />
+            <End Role="Musica" EntitySet="Musica" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="SlahTuneModelStoreContainer" CdmEntityContainer="SlahTuneEntities">
+          <EntitySetMapping Name="Artista">
+            <EntityTypeMapping TypeName="SlahTuneModel.Artista">
+              <MappingFragment StoreEntitySet="Artista">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="Nome" ColumnName="Nome" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Musica">
+            <EntityTypeMapping TypeName="SlahTuneModel.Musica">
+              <MappingFragment StoreEntitySet="Musica">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="Nome" ColumnName="Nome" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Nota">
+            <EntityTypeMapping TypeName="SlahTuneModel.Nota">
+              <MappingFragment StoreEntitySet="Nota">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="Nota1" ColumnName="Nota" />
+                <ScalarProperty Name="Frequencia" ColumnName="Frequencia" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Tablatura">
+            <EntityTypeMapping TypeName="SlahTuneModel.Tablatura">
+              <MappingFragment StoreEntitySet="Tablatura">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="Identificador" ColumnName="Identificador" />
+                <ScalarProperty Name="IDUsuario" ColumnName="IDUsuario" />
+                <ScalarProperty Name="IDMusica" ColumnName="IDMusica" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Usuario">
+            <EntityTypeMapping TypeName="SlahTuneModel.Usuario">
+              <MappingFragment StoreEntitySet="Usuario">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="Nome" ColumnName="Nome" />
+                <ScalarProperty Name="Senha" ColumnName="Senha" />
+                <ScalarProperty Name="Email" ColumnName="Email" />
+                <ScalarProperty Name="Foto" ColumnName="Foto" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <AssociationSetMapping Name="Musica_Has_Artista" TypeName="SlahTuneModel.Musica_Has_Artista" StoreEntitySet="Musica_Has_Artista">
+            <EndProperty Name="Artista">
+              <ScalarProperty Name="ID" ColumnName="IDArtista" />
+            </EndProperty>
+            <EndProperty Name="Musica">
+              <ScalarProperty Name="ID" ColumnName="IDMusica" />
+            </EndProperty>
+          </AssociationSetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="false" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>

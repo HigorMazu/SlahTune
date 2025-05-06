@@ -1,0 +1,16 @@
+# Ignore pastas de build
+bin/
+obj/
+
+# Pastas de dependências locais
+packages/
+
+# Arquivos de usuário e cache
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+
+# Outros arquivos temporários
+*.log
+*.vs/
